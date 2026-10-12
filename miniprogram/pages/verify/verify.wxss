@@ -1,0 +1,23 @@
+.status {
+  text-align: center;
+  padding: 60rpx 28rpx;
+}
+.status .big {
+  font-size: 36rpx;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+}
+.status.approved .big {
+  color: #1f5c4d;
+}
+.status.pending .big {
+  color: #8a5a00;
+}
+.status.rejected {
+  text-align: left;
+  padding: 28rpx;
+}
+.status.rejected .big {
+  color: #9c2f2f;
+  font-size: 30rpx;
+}

@@ -1,0 +1,18 @@
+<view class="container">
+  <view class="tip card">
+    <view class="t">Select your school</view>
+    <view class="muted" style="margin-top:8rpx;">Only the schools below are open in this phase. School cannot be changed after verification.</view>
+  </view>
+  <view class="card school-list">
+    <view
+      wx:for="{{schools}}"
+      wx:key="*this"
+      class="school-item {{current === item ? 'on' : ''}}"
+      data-name="{{item}}"
+      bindtap="onSelect"
+    >
+      <text>{{item}}</text>
+      <text wx:if="{{current === item}}" class="accent">✓ Current</text>
+    </view>
+  </view>
+</view>

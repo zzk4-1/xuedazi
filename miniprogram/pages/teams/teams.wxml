@@ -1,0 +1,59 @@
+<view class="container">
+  <!-- tab -->
+  <view class="tabs">
+    <view class="tab {{tab === 'teams' ? 'on' : ''}}" data-v="teams" bindtap="switchTab">My Teams</view>
+    <view class="tab {{tab === 'apps' ? 'on' : ''}}" data-v="apps" bindtap="switchTab">Applications</view>
+  </view>
+
+  <!-- Teams -->
+  <block wx:if="{{tab === 'teams'}}">
+    <view wx:if="{{teams.length}}">
+      <view class="card" wx:for="{{teams}}" wx:key="id" data-id="{{item.id}}" bindtap="goTeam">
+        <view class="row" style="justify-content:space-between;">
+          <view class="t">{{item.title}}</view>
+          <text class="pill {{item.status === 'recruiting' ? 'goal' : ''}}">{{item.statusText}}</text>
+        </view>
+        <view class="row2">
+          <text>{{item.category}}</text>
+          <text>{{item.joined_count}}/{{item.target_count + 1}} members</text>
+          <text>Ends {{item.end_date}}</text>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty">No teams yet. Check out the Square!</view>
+  </block>
+
+  <!-- Applications -->
+  <block wx:else>
+    <view class="t" style="margin:8rpx 0 16rpx;">Received</view>
+    <view wx:if="{{received.length}}">
+      <view class="card" wx:for="{{received}}" wx:key="id">
+        <view class="row">
+          <view class="avatar small">{{item.applicant_nickname[0]}}</view>
+          <view style="flex:1;">
+            <view>{{item.applicant_nickname}} <text class="muted">applied to</text> {{item.card_title}}</view>
+            <view class="muted">{{item.message}}</view>
+          </view>
+        </view>
+        <view class="row" style="justify-content:flex-end; margin-top:12rpx; gap:16rpx;" wx:if="{{item.status === 'pending'}}">
+          <view class="btn ghost small" data-id="{{item.id}}" data-action="reject" bindtap="onHandle">Reject</view>
+          <view class="btn small" data-id="{{item.id}}" data-action="approve" bindtap="onHandle">Approve</view>
+        </view>
+        <view class="muted" style="text-align:right; margin-top:12rpx;" wx:else>{{item.statusText}}</view>
+      </view>
+    </view>
+    <view wx:else class="empty">No received applications</view>
+
+    <view class="t" style="margin:32rpx 0 16rpx;">Sent</view>
+    <view wx:if="{{sent.length}}">
+      <view class="card" wx:for="{{sent}}" wx:key="id" data-id="{{item.card_id}}" bindtap="goCard">
+        <view class="row" style="justify-content:space-between;">
+          <view class="t">{{item.card_title}}</view>
+          <text class="pill {{item.status === 'approved' ? 'goal' : ''}}">{{item.statusText}}</text>
+        </view>
+        <view class="muted" style="margin-top:8rpx;">{{item.message}}</view>
+      </view>
+    </view>
+    <view wx:else class="empty">No sent applications</view>
+  </block>
+</view>

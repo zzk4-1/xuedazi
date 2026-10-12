@@ -1,0 +1,31 @@
+<view class="container">
+  <!-- Approved -->
+  <view wx:if="{{authStatus === 'approved'}}" class="card status approved">
+    <view class="big">✓ Verification Approved</view>
+    <view class="muted">You can now publish cards and apply to join teams.</view>
+  </view>
+
+  <!-- Pending -->
+  <view wx:elif="{{authStatus === 'pending'}}" class="card status pending">
+    <view class="big">⏳ Under Review</view>
+    <view class="muted">Manual review usually completes within 24 hours.</view>
+  </view>
+
+  <!-- None / Rejected -->
+  <block wx:else>
+    <view wx:if="{{authStatus === 'rejected'}}" class="card status rejected">
+      <view class="big">Verification Rejected</view>
+      <view class="muted">Reason: {{authReason || 'ID photo unclear, please re-upload'}}</view>
+    </view>
+    <view class="card">
+      <view class="t">Upload Student ID</view>
+      <view class="muted" style="margin:12rpx 0 24rpx;">
+        Please upload a photo of your student ID / campus card (page with name and school). Photos are only used for manual review and never shown publicly.
+      </view>
+      <view class="btn" bindtap="onSubmit">
+        {{authStatus === 'rejected' ? 'Resubmit Verification' : 'Submit Verification'}}
+      </view>
+    </view>
+    <view class="muted" style="margin-top:20rpx;">You can browse the Square before verification, but cannot publish or apply.</view>
+  </block>
+</view>

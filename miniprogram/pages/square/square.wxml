@@ -1,0 +1,36 @@
+<view class="container">
+  <!-- Filters -->
+  <view class="filter">
+    <view class="filter-line">
+      <scroll-view scroll-x class="chips" enable-flex>
+        <view wx:for="{{categories}}" wx:key="*this" class="chip {{activeCategory === item ? 'on' : ''}}" data-v="{{item}}" bindtap="onTapCategory">{{item}}</view>
+      </scroll-view>
+    </view>
+    <view class="filter-line">
+      <view class="chips">
+        <view wx:for="{{slots}}" wx:key="*this" class="chip {{activeSlot === item ? 'on' : ''}}" data-v="{{item}}" bindtap="onTapSlot">{{item}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Card list -->
+  <view wx:if="{{cards.length}}">
+    <view class="card item" wx:for="{{cards}}" wx:key="id" data-id="{{item.id}}" bindtap="goCard">
+      <view class="top">
+        <view class="pill goal">{{item.category}}</view>
+        <view class="pill">{{item.type === 'goal' ? 'Goal' : 'Place'}}</view>
+        <text class="right muted">{{item.joined_count}}/{{item.target_count + 1}} joined</text>
+      </view>
+      <view class="t" style="margin-top:12rpx;">{{item.title}}</view>
+      <view class="row2">
+        <text>{{item.place}}</text>
+        <text>{{item.start_date}} ~ {{item.end_date}}</text>
+        <text>{{item.slots}}</text>
+      </view>
+      <view class="row2" style="margin-top:10rpx;">
+        <text class="accent">{{item.creator_nickname}}</text>
+      </view>
+    </view>
+  </view>
+  <view wx:else class="empty">No buddy cards match. Publish one yourself!</view>
+</view>

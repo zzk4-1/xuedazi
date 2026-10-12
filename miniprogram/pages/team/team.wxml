@@ -1,0 +1,59 @@
+<view class="container" wx:if="{{card}}">
+  <!-- Team info -->
+  <view class="card">
+    <view class="t">{{card.title}}</view>
+    <view class="row2">
+      <text>{{card.category}}</text>
+      <text>{{card.start_date}} ~ {{card.end_date}}</text>
+      <text>{{card.place}}</text>
+    </view>
+    <view class="row2"><text>Today: {{today}}</text></view>
+  </view>
+
+  <!-- Member check-in status -->
+  <view class="card">
+    <view class="t" style="margin-bottom:8rpx;">Today's Status</view>
+    <view class="member" wx:for="{{card.members}}" wx:key="openid">
+      <view class="avatar small">{{item.nickname[0]}}</view>
+      <view style="flex:1;">
+        <view>
+          {{item.nickname}}
+          <text wx:if="{{item.openid === card.creator_openid}}" class="pill goal">Creator</text>
+        </view>
+        <view class="muted">Streak: {{streaks[item.openid] || 0}} days</view>
+      </view>
+      <view class="st">
+        <text wx:if="{{checkedMap[item.openid]}}" class="done">✓ Checked in</text>
+        <text wx:else class="todo">Not yet</text>
+      </view>
+      <text class="muted report" data-openid="{{item.openid}}" bindtap="goReport" wx:if="{{item.openid !== myOpenid}}">Report</text>
+    </view>
+  </view>
+
+  <!-- My check-in -->
+  <view class="card" wx:if="{{!todayChecked}}">
+    <view class="t" style="margin-bottom:12rpx;">Check in Today</view>
+    <view class="field" style="margin-bottom:16rpx;">
+      <textarea class="textarea" placeholder="What did you finish today? (max 100 chars)" value="{{text}}" bindinput="onInput" maxlength="100"/>
+    </view>
+    <view class="btn" bindtap="onCheckin">Check In</view>
+  </view>
+  <view class="card" wx:else style="text-align:center;">
+    <view class="accent">✓ Checked in today. Keep it up tomorrow!</view>
+  </view>
+
+  <!-- Today's check-in records -->
+  <view class="card" wx:if="{{checkins.length}}">
+    <view class="t" style="margin-bottom:8rpx;">Today's Check-ins</view>
+    <view class="checkin" wx:for="{{checkins}}" wx:key="id">
+      <view class="row">
+        <view class="avatar small">{{item.nickname[0]}}</view>
+        <view style="flex:1;">
+          <view>{{item.nickname}}</view>
+          <view class="muted">{{item.created_at}}</view>
+        </view>
+      </view>
+      <view class="content">{{item.text}}</view>
+    </view>
+  </view>
+</view>

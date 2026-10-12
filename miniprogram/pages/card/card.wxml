@@ -1,0 +1,78 @@
+<view class="container" wx:if="{{card}}">
+  <view class="card">
+    <view class="row">
+      <view class="avatar">{{card.creator_nickname[0]}}</view>
+      <view>
+        <view class="t">{{card.title}}</view>
+        <view class="muted">{{card.creator_nickname}} · {{card.school}}</view>
+      </view>
+    </view>
+    <view class="divider"></view>
+    <view class="meta">
+      <view class="meta-row"><text class="k">Category</text><text>{{card.category}}</text></view>
+      <view class="meta-row"><text class="k">Type</text><text>{{card.type === 'goal' ? 'Goal buddy' : 'Place buddy'}}</text></view>
+      <view class="meta-row"><text class="k">Period</text><text>{{card.start_date}} ~ {{card.end_date}}</text></view>
+      <view class="meta-row"><text class="k">Time slots</text><text>{{card.slots.join(', ')}}</text></view>
+      <view class="meta-row"><text class="k">Place</text><text>{{card.place}}</text></view>
+      <view class="meta-row" wx:if="{{card.description}}"><text class="k">Notes</text><text>{{card.description}}</text></view>
+    </view>
+    <view class="divider"></view>
+    <view class="row" style="justify-content:space-between;">
+      <text class="muted">Members {{card.joined_count}} / {{card.target_count + 1}}</text>
+      <text class="muted" bindtap="goReport">Report</text>
+    </view>
+  </view>
+
+  <!-- Members -->
+  <view class="card">
+    <view class="t" style="margin-bottom:12rpx;">Team Members</view>
+    <view class="member" wx:for="{{card.members}}" wx:key="openid">
+      <view class="avatar small">{{item.nickname[0]}}</view>
+      <text>{{item.nickname}}</text>
+      <text wx:if="{{item.openid === card.creator_openid}}" class="pill goal">Creator</text>
+    </view>
+  </view>
+
+  <!-- Creator: pending applications -->
+  <view class="card" wx:if="{{card.is_creator && receivedApps.length}}">
+    <view class="t" style="margin-bottom:12rpx;">Pending Applications ({{receivedApps.length}})</view>
+    <view class="app-item" wx:for="{{receivedApps}}" wx:key="id">
+      <view class="row">
+        <view class="avatar small">{{item.applicant_nickname[0]}}</view>
+        <view style="flex:1;">
+          <view>{{item.applicant_nickname}}</view>
+          <view class="muted">{{item.message}}</view>
+        </view>
+      </view>
+      <view class="row" style="justify-content:flex-end; margin-top:12rpx; gap:16rpx;">
+        <view class="btn ghost small" data-id="{{item.id}}" data-action="reject" bindtap="onHandleApp">Reject</view>
+        <view class="btn small" data-id="{{item.id}}" data-action="approve" bindtap="onHandleApp">Approve</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Applicant entry -->
+  <view wx:if="{{!card.is_creator}}">
+    <!-- Already a member -->
+    <view wx:if="{{card.is_member}}" class="btn" bindtap="goTeam">Enter Team Check-in</view>
+    <!-- Applied -->
+    <view wx:elif="{{card.my_application}}" class="card" style="text-align:center;">
+      <view class="muted" wx:if="{{card.my_application.status === 'pending'}}">Application pending, waiting for creator</view>
+      <view class="accent" wx:elif="{{card.my_application.status === 'approved'}}">Approved! Enter the team now</view>
+    </view>
+    <!-- Not applied -->
+    <view wx:elif="{{card.status === 'recruiting'}}" class="card">
+      <view class="field" style="margin-bottom:16rpx;">
+        <view class="label">Application message (max 50 chars)</view>
+        <textarea class="textarea" placeholder="Introduce your goal and pace" value="{{applyMsg}}" bindinput="onApplyInput" maxlength="50"/>
+      </view>
+      <view class="btn" bindtap="onApply">Apply to Join</view>
+    </view>
+    <view wx:else class="card" style="text-align:center;">
+      <view class="muted">This card is no longer recruiting</view>
+    </view>
+  </view>
+
+  <!-- Creator can also enter team -->
+  <view wx:if="{{card.is_creator}}" class="btn" bindtap="goTeam">Enter Team Check-in</view>
+</view>

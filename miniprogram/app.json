@@ -1,0 +1,38 @@
+{
+  "pages": [
+    "pages/square/square",
+    "pages/publish/publish",
+    "pages/teams/teams",
+    "pages/chats/chats",
+    "pages/me/me",
+    "pages/card/card",
+    "pages/team/team",
+    "pages/chat/chat",
+    "pages/verify/verify",
+    "pages/school/school",
+    "pages/report/report",
+    "pages/admin/admin"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#1f5c4d",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "StudyBuddy",
+    "backgroundColor": "#f2f6f4",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#5b6572",
+    "selectedColor": "#1f5c4d",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/square/square", "text": "Square" },
+      { "pagePath": "pages/publish/publish", "text": "Publish" },
+      { "pagePath": "pages/teams/teams", "text": "Teams" },
+      { "pagePath": "pages/chats/chats", "text": "Messages" },
+      { "pagePath": "pages/me/me", "text": "Me" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

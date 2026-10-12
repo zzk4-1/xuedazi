@@ -1,0 +1,18 @@
+<view class="container">
+  <view class="card">
+    <view class="field">
+      <view class="label">Reason</view>
+      <view class="chips">
+        <view wx:for="{{reasons}}" wx:key="*this" class="chip {{reason === item ? 'on' : ''}}" data-v="{{item}}" bindtap="onPickReason">{{item}}</view>
+      </view>
+    </view>
+    <view class="field">
+      <view class="label">Details (optional, max 200 chars)</view>
+      <textarea class="textarea" placeholder="Add details to help moderators review" value="{{detail}}" bindinput="onInput" maxlength="200"/>
+    </view>
+    <view class="btn" bindtap="onSubmit">Submit Report</view>
+    <view class="muted" style="margin-top:16rpx; font-size:22rpx;">
+      Reports are reviewed within 24 hours. Abusive reporting may affect your account.
+    </view>
+  </view>
+</view>

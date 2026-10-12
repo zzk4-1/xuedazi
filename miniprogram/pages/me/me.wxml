@@ -1,0 +1,37 @@
+<view class="container" wx:if="{{user}}">
+  <!-- User info -->
+  <view class="card user-card">
+    <view class="avatar big">{{user.nickname ? user.nickname[0] : 'M'}}</view>
+    <view style="flex:1;">
+      <view wx:if="{{!editingNick}}" class="t">
+        {{user.nickname || 'No nickname'}}
+        <text class="muted edit" bindtap="onEditNick">Edit</text>
+      </view>
+      <view wx:else class="row">
+        <input class="nick-input" value="{{nickname}}" bindinput="onNickInput" maxlength="20" placeholder="Enter nickname"/>
+        <text class="accent" bindtap="onSaveNick" style="padding:8rpx 16rpx;">Save</text>
+      </view>
+      <view class="muted" style="margin-top:6rpx;">{{user.school || 'No school selected'}}</view>
+    </view>
+  </view>
+
+  <!-- Menu -->
+  <view class="card menu">
+    <view class="menu-item" bindtap="goSchool">
+      <text>My School</text>
+      <text class="muted">{{user.school || 'Select'}} ›</text>
+    </view>
+    <view class="menu-item" bindtap="goVerify">
+      <text>Student Verification</text>
+      <text class="muted">{{authText}} ›</text>
+    </view>
+    <view class="menu-item" wx:if="{{user.role === 1}}" bindtap="goAdmin">
+      <text>Admin Console</text>
+      <text class="muted">›</text>
+    </view>
+  </view>
+
+  <view class="muted" style="text-align:center; margin-top:40rpx; font-size:22rpx;">
+    StudyBuddy MVP · Find study buddies with the same goal on your campus
+  </view>
+</view>

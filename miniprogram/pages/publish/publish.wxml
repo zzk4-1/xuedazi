@@ -1,0 +1,61 @@
+<view class="container">
+  <view class="card">
+    <view class="field">
+      <view class="label">Title</view>
+      <input class="input" placeholder="e.g. Daily GRE math buddy" data-key="title" value="{{title}}" bindinput="onInput"/>
+    </view>
+
+    <view class="field">
+      <view class="label">Type</view>
+      <picker mode="selector" range="{{['Goal buddy', 'Place buddy']}}" bindchange="onTypeChange">
+        <view class="picker">{{type === 'goal' ? 'Goal buddy' : 'Place buddy'}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="label">Category</view>
+      <picker mode="selector" range="{{categories}}" bindchange="onPickCategory">
+        <view class="picker">{{category}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="label">Period</view>
+      <view class="row">
+        <picker mode="date" bindchange="onPickDate" data-key="start">
+          <view class="picker half {{start_date?'':'placeholder'}}">{{start_date || 'Start date'}}</view>
+        </picker>
+        <text style="margin:0 12rpx;">~</text>
+        <picker mode="date" bindchange="onPickDate" data-key="end">
+          <view class="picker half {{end_date?'':'placeholder'}}">{{end_date || 'End date'}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="label">Daily time slots (multi-select)</view>
+      <view class="chips">
+        <view wx:for="{{slotOptions}}" wx:key="*this" class="chip {{slots.indexOf(item)>=0?'on':''}}" data-v="{{item}}" bindtap="toggleSlot">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="label">Campus place</view>
+      <input class="input" placeholder="e.g. East Library, 3rd floor" data-key="place" value="{{place}}" bindinput="onInput"/>
+    </view>
+
+    <view class="field">
+      <view class="label">Team size (including you)</view>
+      <picker mode="selector" range="{{countOptions}}" bindchange="onPickCount">
+        <view class="picker">{{target_count}} people</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="label">Description (optional)</view>
+      <textarea class="textarea" placeholder="e.g. check-in format, schedule preferences" data-key="description" value="{{description}}" bindinput="onInput"/>
+    </view>
+
+    <view class="btn" bindtap="onSubmit">Publish</view>
+  </view>
+</view>

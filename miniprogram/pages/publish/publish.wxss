@@ -1,0 +1,15 @@
+.picker {
+  background: #fff;
+  border: 1rpx solid #e3e7ec;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  font-size: 28rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+.picker.half {
+  width: 260rpx;
+}
+.picker.placeholder {
+  color: #999;
+}

@@ -1,0 +1,28 @@
+.meta-row {
+  display: flex;
+  padding: 8rpx 0;
+  font-size: 26rpx;
+}
+.meta-row .k {
+  width: 96rpx;
+  color: #5b6572;
+  flex: none;
+}
+.member {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 12rpx 0;
+}
+.avatar.small {
+  width: 56rpx;
+  height: 56rpx;
+  font-size: 24rpx;
+}
+.app-item {
+  border-top: 1rpx dashed #e3e7ec;
+  padding: 16rpx 0;
+}
+.app-item:first-of-type {
+  border-top: none;
+}

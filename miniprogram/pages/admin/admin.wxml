@@ -1,0 +1,40 @@
+<view class="container">
+  <view class="tabs">
+    <view class="tab {{tab === 'auth' ? 'on' : ''}}" data-v="auth" bindtap="switchTab">Verifications</view>
+    <view class="tab {{tab === 'reports' ? 'on' : ''}}" data-v="reports" bindtap="switchTab">Reports</view>
+  </view>
+
+  <!-- Verification review -->
+  <block wx:if="{{tab === 'auth'}}">
+    <view wx:if="{{pendingAuth.length}}">
+      <view class="card" wx:for="{{pendingAuth}}" wx:key="openid">
+        <view class="t">{{item.nickname}}</view>
+        <view class="muted" style="margin:6rpx 0 16rpx;">{{item.school}} · {{item.created_at}}</view>
+        <view class="row" style="justify-content:flex-end; gap:16rpx;">
+          <view class="btn ghost small" data-openid="{{item.openid}}" data-action="reject" bindtap="onAuthHandle">Reject</view>
+          <view class="btn small" data-openid="{{item.openid}}" data-action="approve" bindtap="onAuthHandle">Approve</view>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty">No pending verifications</view>
+  </block>
+
+  <!-- Report handling -->
+  <block wx:else>
+    <view wx:if="{{reports.length}}">
+      <view class="card" wx:for="{{reports}}" wx:key="id">
+        <view class="row" style="justify-content:space-between;">
+          <view class="t">{{item.reason}}</view>
+          <text class="pill">{{item.target_type === 'card' ? 'Card' : item.target_type === 'user' ? 'User' : 'Message'}}</text>
+        </view>
+        <view class="muted" style="margin:8rpx 0;">Target ID: {{item.target_id}}</view>
+        <view class="muted" wx:if="{{item.detail}}">Details: {{item.detail}}</view>
+        <view class="muted" style="margin-bottom:16rpx;">Reporter: {{item.reporter_openid}} · {{item.created_at}}</view>
+        <view class="row" style="justify-content:flex-end;">
+          <view class="btn small" data-id="{{item.id}}" data-type="{{item.target_type}}" bindtap="onReportHandle">Handle</view>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="empty">No pending reports</view>
+  </block>
+</view>

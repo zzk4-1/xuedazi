@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学搭子 · 产品需求文档（PRD v0.1）</title>
+<style>
+  :root{
+    --ink:#1c2430; --sub:#5b6572; --line:#e3e7ec; --bg:#fafbfc;
+    --accent:#1f5c4d; --accent-soft:#e8f2ef; --warn:#8a5a00; --warn-soft:#fdf3e0;
+    --bad:#9c2f2f; --bad-soft:#faecec; --demo-bg:#f2f6f4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+       color:var(--ink); background:var(--bg); line-height:1.75; font-size:15px;}
+  .wrap{max-width:880px; margin:0 auto; padding:48px 28px 120px;}
+
+  header.cover{border-bottom:3px solid var(--ink); padding-bottom:28px; margin-bottom:40px;}
+  .doc-type{font-size:12px; letter-spacing:.2em; color:var(--sub); text-transform:uppercase;}
+  h1{font-size:34px; margin:6px 0 4px; letter-spacing:.02em;}
+  .subtitle{color:var(--sub); font-size:15px;}
+  .meta{display:flex; flex-wrap:wrap; gap:10px 26px; margin-top:18px; font-size:13px; color:var(--sub);}
+  .meta b{color:var(--ink); font-weight:600;}
+
+  nav.toc{position:sticky; top:0; z-index:9; background:var(--bg); border-bottom:1px solid var(--line);
+          padding:10px 0; margin-bottom:36px; font-size:13px;}
+  nav.toc a{color:var(--sub); text-decoration:none; margin-right:18px; white-space:nowrap;}
+  nav.toc a:hover{color:var(--accent);}
+
+  h2{font-size:22px; margin:52px 0 14px; padding-top:10px; border-top:1px solid var(--line);}
+  h2 .no{color:var(--accent); margin-right:8px; font-variant-numeric:tabular-nums;}
+  h3{font-size:16px; margin:26px 0 8px;}
+  p{margin:8px 0;}
+  ul,ol{margin:8px 0 8px 22px;}
+  li{margin:4px 0;}
+  .lead{color:var(--sub);}
+
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-size:13.5px; background:#fff;}
+  th,td{border:1px solid var(--line); padding:8px 12px; text-align:left; vertical-align:top;}
+  th{background:#f1f4f2; font-weight:600; white-space:nowrap;}
+  td ul{margin:4px 0 4px 18px;}
+
+  .tag{display:inline-block; font-size:11px; padding:1px 8px; border-radius:10px; margin-right:6px; vertical-align:1px;}
+  .tag.assume{background:var(--warn-soft); color:var(--warn);}
+  .tag.tbd{background:var(--bad-soft); color:var(--bad);}
+  .tag.p0{background:var(--accent-soft); color:var(--accent);}
+  .tag.p1{background:#eef1f5; color:var(--sub);}
+  code{background:#eef1f4; padding:1px 6px; border-radius:4px; font-size:13px;}
+
+  .fr{border:1px solid var(--line); border-left:3px solid var(--accent); background:#fff;
+      border-radius:0 8px 8px 0; padding:18px 22px; margin:20px 0;}
+  .fr-id{font-size:12px; color:var(--accent); font-weight:700; letter-spacing:.08em;}
+  .fr h3{margin-top:2px;}
+
+  .flow{display:flex; flex-wrap:wrap; gap:8px; align-items:stretch; margin:16px 0;}
+  .flow .step{flex:1 1 130px; background:#fff; border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:12.5px;}
+  .flow .step b{display:block; font-size:13px; color:var(--accent); margin-bottom:2px;}
+  .flow .arr{align-self:center; color:var(--sub); font-size:16px;}
+
+  .demo{background:var(--demo-bg); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin:16px 0;}
+  .demo-label{font-size:12px; color:var(--sub); margin-bottom:10px;}
+  .demo-label b{color:var(--accent);}
+  .phone{max-width:400px; margin:0 auto; background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; font-size:13px;}
+  .btn{display:inline-block; background:var(--accent); color:#fff; border:none; border-radius:8px;
+       padding:7px 16px; font-size:13px; cursor:pointer;}
+  .btn:disabled{background:#c3cdc9; cursor:not-allowed;}
+  .btn.ghost{background:#fff; color:var(--accent); border:1px solid var(--accent);}
+  .btn.small{padding:4px 12px; font-size:12px;}
+  .field{margin-bottom:12px;}
+  .field label{display:block; font-size:12.5px; color:var(--sub); margin-bottom:4px;}
+  .field input[type=text],.field input[type=date],.field input[type=number],.field select,.field textarea{
+      width:100%; border:1px solid var(--line); border-radius:6px; padding:7px 10px; font-size:13px; font-family:inherit;}
+  .field textarea{resize:vertical; min-height:52px;}
+  .field .err{color:var(--bad); font-size:12px; margin-top:3px; display:none;}
+  .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:var(--bad);}
+  .field.invalid .err{display:block;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{border:1px solid var(--line); background:#fff; border-radius:16px; padding:4px 14px; font-size:12.5px; cursor:pointer; user-select:none;}
+  .chip.on{background:var(--accent); border-color:var(--accent); color:#fff;}
+  .card{border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:10px; background:#fff;}
+  .card .t{font-weight:600;}
+  .card .row2{display:flex; flex-wrap:wrap; gap:6px 14px; color:var(--sub); font-size:12px; margin-top:4px;}
+  .card .join{color:var(--accent); font-weight:600;}
+  .pill{display:inline-block; font-size:11px; padding:0 8px; border-radius:9px; background:#eef1f5; color:var(--sub); margin-right:6px;}
+  .pill.goal{background:var(--accent-soft); color:var(--accent);}
+  .empty{text-align:center; color:var(--sub); padding:26px 10px; border:1px dashed var(--line); border-radius:10px; background:#fff;}
+  .ok-msg{background:var(--accent-soft); color:var(--accent); border-radius:8px; padding:8px 12px; font-size:12.5px; margin-top:10px; display:none;}
+  .block-msg{background:var(--bad-soft); color:var(--bad); border-radius:8px; padding:8px 12px; font-size:12.5px; margin-top:10px; display:none;}
+  .member{display:flex; align-items:center; gap:10px; padding:8px 4px; border-bottom:1px dashed var(--line);}
+  .member:last-child{border-bottom:none;}
+  .avatar{width:34px; height:34px; border-radius:50%; background:var(--accent-soft); color:var(--accent);
+          display:flex; align-items:center; justify-content:center; font-weight:700; flex:none;}
+  .member .who b{font-size:13px;} .member .who span{display:block; font-size:11.5px; color:var(--sub);}
+  .member .st{margin-left:auto; text-align:right; font-size:11.5px; color:var(--sub); flex:none;}
+  .st .done{color:var(--accent); font-weight:600;}
+  .st .todo{color:var(--warn); font-weight:600;}
+  .note{font-size:12px; color:var(--sub); margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="cover">
+  <div class="doc-type">Product Requirements Document</div>
+  <h1>学搭子 <span style="font-size:16px;color:var(--sub);font-weight:400;">（工作名，正式名 <span class="tag tbd">TBD</span>）</span></h1>
+  <div class="subtitle">校园学习搭子撮合微信小程序 —— 发布搭子卡片、同校同目标互相响应、组队打卡监督</div>
+  <div class="meta">
+    <span>版本 <b>v0.1（草稿 · 待评审）</b></span>
+    <span>日期 <b>2026-10-12</b></span>
+    <span>作者 <b>zzk4-1</b></span>
+    <span>平台 <b>微信小程序</b></span>
+  </div>
+</header>
+
+<nav class="toc">
+  <a href="#s1">01 背景与目标</a>
+  <a href="#s2">02 产品契约</a>
+  <a href="#s3">03 范围</a>
+  <a href="#s4">04 角色与对象</a>
+  <a href="#s5">05 功能需求</a>
+  <a href="#s6">06 共享规则</a>
+  <a href="#s7">07 待定问题</a>
+</nav>
+
+<!-- ========== 01 ========== -->
+<h2 id="s1"><span class="no">01</span>背景与目标</h2>
+<p class="lead">「找搭子」需求已被充分验证（小红书找搭子帖、校园墙、豆瓣小组撮合活跃），但撮合行为全部发生在通用社区里，无结构化筛选、无时间窗约束、无后续监督承接。存量产品各占一半：搭子类平台有社交无留存（撮合一次性），打卡工具有留存无社交（无真实同伴）。</p>
+<p><b>产品决策</b>：收窄到校园学习场景（考研 / 自习 / 四六级）作为唯一切入点——一个学校即一个天然密度池，「同目的地（同校）」与「同目标（备考）」在校园内同时成立，无需 LBS 基建。地点维度承担获客信任感，目标维度（进度与打卡）承担留存。</p>
+<p><b>可观察结果</b>：用户能够独立完成「发布搭子卡片 → 被同校用户响应 → 组队 → 连续多日互相可见打卡」的完整闭环，全程无需平台人工介入（认证审核除外）。</p>
+<p><b>MVP 验证指标</b>：<span class="tag assume">假设</span>唯一核心指标为<b>发卡 48 小时响应率</b>（招募中卡片在发布后 48h 内收到 ≥1 个申请的比例）。低于约定阈值则验证失败，收缩或更换场景，而非堆功能。</p>
+
+<!-- ========== 02 ========== -->
+<h2 id="s2"><span class="no">02</span>产品契约</h2>
+<table>
+  <tr><th style="width:130px;">要素</th><th>定义</th></tr>
+  <tr><td>主用户</td><td>在校大学生，正处于备考 / 自习 / 语言考试周期内，想要同伴监督与陪伴</td></tr>
+  <tr><td>触发</td><td>备考或自习周期开始时，主动寻找同校、同目标、时间窗重合的搭子</td></tr>
+  <tr><td>核心任务</td><td>发布搭子卡片或响应他人卡片，组成小队后每日打卡互相监督</td></tr>
+  <tr><td>完成证据</td><td>用户在小队页可见全体成员当日打卡状态与连续天数</td></tr>
+  <tr><td>共享业务对象</td><td><b>搭子卡片</b>（撮合载体）与<b>小队</b>（关系与打卡载体），两者 1 : 1</td></tr>
+  <tr><td>信任基础</td><td>微信实名登录 + 学生身份人工审核 + 全量 UGC 内容安全检测 + 举报处理</td></tr>
+</table>
+
+<!-- ========== 03 ========== -->
+<h2 id="s3"><span class="no">03</span>范围</h2>
+
+<h3>P0 闭环（最小完整旅程）</h3>
+<div class="flow">
+  <div class="step"><b>1 登录选校</b>微信授权登录，选择本校</div>
+  <div class="arr">→</div>
+  <div class="step"><b>2 学生认证</b>上传证件照，人工审核通过后解锁发布/申请</div>
+  <div class="arr">→</div>
+  <div class="step"><b>3 发布卡片</b>目标或地点 + 周期 + 每日时段 + 校内地点</div>
+  <div class="arr">→</div>
+  <div class="step"><b>4 广场响应</b>本校用户按类别/时段筛选，留言申请</div>
+  <div class="arr">→</div>
+  <div class="step"><b>5 审批组队</b>发起人通过申请，申请者进入小队并开放私聊</div>
+  <div class="arr">→</div>
+  <div class="step"><b>6 每日打卡</b>小队内每人每日一次，成员互相可见</div>
+</div>
+<ul>
+  <li><b>入口条件</b>：微信授权登录并完成本校选择。</li>
+  <li><b>完成证据</b>：小队页展示全体成员当日打卡状态。</li>
+  <li><b>最重要失败的恢复路径</b>：学生认证被拒 → 展示拒绝原因，允许重新提交（见 FR-02）。</li>
+</ul>
+
+<h3>P1（本期不做，接口留白）</h3>
+<p><span class="tag p1">P1</span>目标进度百分比、小队打卡排行、搭子解散/毕业后的评价体系、跨校与旅行搭子扩展、订阅消息打卡提醒的精细策略。</p>
+
+<h3>明确不做（防止范围蔓延）</h3>
+<p><span class="tag p0">P0 排除</span>匹配推荐算法（筛选即匹配）、LBS 地图与精确时刻区间计算、实时 IM（私聊为异步留言式）、积分与激励体系、任何变现功能、完整 Web 管理后台（MVP 用最小管理手段，见 FR-08）。</p>
+
+<!-- ========== 04 ========== -->
+<h2 id="s4"><span class="no">04</span>角色与对象模型</h2>
+
+<h3>4.1 角色</h3>
+<table>
+  <tr><th>角色</th><th>获得方式</th><th>能力边界</th></tr>
+  <tr><td>访客</td><td>微信授权登录，未通过学生认证</td><td>可浏览广场与卡片详情；不可发布、申请、私聊、打卡</td></tr>
+  <tr><td>认证学生</td><td>学生认证审核通过</td><td>发布卡片、申请、私聊、打卡、举报</td></tr>
+  <tr><td>发起人（队长）</td><td>发布卡片者自动成为队长</td><td>认证学生全部能力 + 审批申请、移出成员、转让队长、手动结束卡片</td></tr>
+  <tr><td>管理员</td><td><span class="tag assume">假设</span>开发者本人，通过最小管理手段（后台直接操作）</td><td>下架卡片、封禁用户、处理举报</td></tr>
+</table>
+
+<h3>4.2 对象与字段</h3>
+<table>
+  <tr><th>对象</th><th>关键字段</th><th>规则</th></tr>
+  <tr>
+    <td><b>用户</b></td>
+    <td>昵称、头像（取自微信）、学校、认证状态、注册时间</td>
+    <td>昵称默认取微信昵称，可改；学校登录后选择，<b>认证通过前不可更改</b>（改校需重新认证）<span class="tag assume">假设</span></td>
+  </tr>
+  <tr>
+    <td><b>搭子卡片</b></td>
+    <td>卡片ID、类型（目标型 / 地点型）、标题、目标类别、描述、开始日期、结束日期、每日时段标签（多选）、校内地点、目标人数、已加入人数、状态、发布者、发布时间</td>
+    <td>字段级校验见 FR-03；目标类别为预设枚举：考研 / 考公 / 四六级 / 期末自习 / 读书 / 健身 / 其他</td>
+  </tr>
+  <tr>
+    <td><b>报名申请</b></td>
+    <td>申请人、卡片、留言、状态、申请时间、处理时间</td>
+    <td>留言必填 ≤50 字</td>
+  </tr>
+  <tr>
+    <td><b>小队</b></td>
+    <td>小队ID、所属卡片、成员列表、队长、创建时间、状态</td>
+    <td>与卡片 1 : 1，<b>随卡片发布同时创建</b>；队长即卡片发布者，为第 1 名成员；后续申请通过即入队</td>
+  </tr>
+  <tr>
+    <td><b>打卡记录</b></td>
+    <td>小队、成员、日期、文字内容、图片（可选 1 张）、打卡时间、连续天数</td>
+    <td>每人每小队<b>每日限 1 条</b>；文字必填 ≤100 字；当日 24:00 截止，<b>不支持补签</b> <span class="tag assume">假设</span></td>
+  </tr>
+  <tr>
+    <td><b>私聊会话</b></td>
+    <td>会话ID、双方用户、消息列表、最后消息时间</td>
+    <td>申请通过后自动为双方创建；异步留言式，不承诺实时性</td>
+  </tr>
+  <tr>
+    <td><b>举报</b></td>
+    <td>举报人、对象类型（卡片 / 用户 / 消息）、对象ID、理由、状态、处理结果</td>
+    <td>理由必填，从预设理由选择 + 补充说明</td>
+  </tr>
+</table>
+
+<h3>4.3 状态机</h3>
+<table>
+  <tr><th>对象</th><th>状态</th><th>迁移</th></tr>
+  <tr><td rowspan="4"><b>卡片</b></td><td>招募中</td><td>初始态。可通过 → 已满员 / 已结束 / 已下架</td></tr>
+  <tr><td>已满员</td><td>通过人数达到目标人数时自动进入；到达结束日期 → 已结束</td></tr>
+  <tr><td>已结束</td><td>到达结束日期自动进入，或队长手动结束；小队转只读，不可打卡</td></tr>
+  <tr><td>已下架</td><td>管理员处置违规卡片；对发布者与已加入成员可见原因</td></tr>
+  <tr><td rowspan="3"><b>报名申请</b></td><td>待处理</td><td>初始态；所属卡片离开「招募中」时自动置为已失效</td></tr>
+  <tr><td>已通过</td><td>队长操作；申请人加入小队，双方建立私聊会话</td></tr>
+  <tr><td>已拒绝 / 已失效</td><td>队长拒绝，或卡片不再招募时系统批量置为已失效</td></tr>
+  <tr><td rowspan="3"><b>用户认证</b></td><td>未认证</td><td>初始态</td></tr>
+  <tr><td>审核中</td><td>已提交证件照；可撤回重新提交</td></tr>
+  <tr><td>已认证 / 未通过</td><td>未通过展示原因，可重新提交（次数暂不限制 <span class="tag assume">假设</span>）</td></tr>
+</table>
+
+<!-- ========== 05 ========== -->
+<h2 id="s5"><span class="no">05</span>功能需求</h2>
+
+<div class="fr">
+  <div class="fr-id">FR-01</div>
+  <h3>登录与学校选择</h3>
+  <p><b>触发</b>：首次打开小程序。<b>处理</b>：微信一键授权登录（昵称头像取自微信资料），随后进入学校选择页——从内置学校白名单中选择本校。<span class="tag assume">假设</span> 首期白名单由运营手动维护，仅覆盖计划推广的学校；用户所选学校不在白名单时，可提交「求开放」反馈（记录学校名），页面提示「本校暂未开放」。</p>
+  <p><b>结果与状态</b>：登录完成、学校落库，进入广场（访客态）。学校一经选择，认证通过前锁定。</p>
+</div>
+
+<div class="fr">
+  <div class="fr-id">FR-02</div>
+  <h3>学生认证</h3>
+  <p><b>触发</b>：访客点击任何需要认证身份的动作（发布 / 申请 / 私聊 / 打卡）时引导进入；也可从「我的」主动进入。</p>
+  <p><b>处理</b>：上传 1 张学生证或校园卡照片（提示遮挡身份证号等敏感信息）→ 状态置为审核中。<span class="tag assume">假设</span> MVP 采用人工审核（开发者本人查看），承诺 T+1 内完成；不做 OCR 自动识别。</p>
+  <p><b>结果与状态</b>：通过 → 已认证，解锁全部认证学生能力并推送结果通知；未通过 → 展示原因（如「照片模糊」「非有效证件」），可重新提交。<b>未认证用户的所有写操作入口可见但点击即引导认证</b>，不做隐藏。</p>
+</div>
+
+<div class="fr">
+  <div class="fr-id">FR-03</div>
+  <h3>发布搭子卡片</h3>
+  <p><b>触发</b>：认证学生在广场点击「发布搭子」。</p>
+  <p><b>处理规则</b>：</p>
+  <ul>
+    <li><b>类型</b>：二选一——目标型（围绕一个要完成的成果）或地点型（围绕一个校内地点的共处时间）。类型影响详情页强调的字段，不影响权限与状态机。</li>
+    <li><b>标题</b>：必填，≤20 字。</li>
+    <li><b>目标类别</b>：必选枚举（考研 / 考公 / 四六级 / 期末自习 / 读书 / 健身 / 其他）。</li>
+    <li><b>周期</b>：开始日期 ≥ 今天；结束日期 &gt; 开始日期且 ≤ 开始 + 180 天。<span class="tag assume">假设</span> 上限 180 天覆盖考研备考周期并防止僵尸卡片。</li>
+    <li><b>每日时段</b>：多选标签，至少 1 项——清晨（6–8）/ 上午（8–12）/ 下午（12–18）/ 晚上（18–23）。<span class="tag p0">决策</span> 用标签而非精确时刻区间，MVP 仅用于筛选展示，不做重合度计算。</li>
+    <li><b>校内地点</b>：必填，从本校常用地点标签中选择或自定义文本（如「东图书馆三楼」）。地点型卡片此字段为卡片主体。</li>
+    <li><b>想找几位搭子</b>：1–10，<b>不含自己</b>。卡片「目标人数」= 该数值 + 1（含队长），广场展示「已加入 1/4」即队长已占 1 席。</li>
+    <li><b>描述</b>：选填，≤200 字。</li>
+    <li><b>数量限制</b>：同一用户最多同时持有 <b>2 张</b>「招募中」卡片。<span class="tag assume">假设</span> 防刷屏，同时保留「考研 + 跑步」双搭子场景。</li>
+  </ul>
+  <p><b>结果与状态</b>：全部 UGC 字段先过内容安全检测（见共享规则 R-2），命中则发布失败并提示修改；通过后卡片以「招募中」进入广场，小队同时预创建，队长为第 1 名成员。</p>
+
+  <div class="demo">
+    <div class="demo-label"><b>可交互示例</b> · FR-03 发布表单 —— 直接操作体验校验：空提交看错误、切换「未认证」看拦截、填写完整看成功预览。数据为示例。</div>
+    <div class="phone">
+      <div style="font-weight:600;margin-bottom:10px;">发布搭子</div>
+      <div class="field" id="f-title">
+        <label>标题（必填，≤20字）</label>
+        <input type="text" id="i-title" maxlength="20" placeholder="如：考研数学 daily 打卡搭子">
+        <div class="err">请填写 20 字以内的标题</div>
+      </div>
+      <div class="field">
+        <label>类型</label>
+        <div class="chips" id="f-type">
+          <span class="chip on" data-v="目标型">目标型</span>
+          <span class="chip" data-v="地点型">地点型</span>
+        </div>
+      </div>
+      <div class="field" id="f-cat">
+        <label>目标类别（必选）</label>
+        <select id="i-cat">
+          <option value="">请选择</option>
+          <option>考研</option><option>考公</option><option>四六级</option>
+          <option>期末自习</option><option>读书</option><option>健身</option><option>其他</option>
+        </select>
+        <div class="err">请选择目标类别</div>
+      </div>
+      <div class="field" id="f-date">
+        <label>周期</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="date" id="i-d1" style="flex:1"><span style="color:var(--sub)">至</span>
+          <input type="date" id="i-d2" style="flex:1">
+        </div>
+        <div class="err">开始需 ≥ 今天，结束需晚于开始且不超过 180 天</div>
+      </div>
+      <div class="field" id="f-slot">
+        <label>每日时段（至少 1 项）</label>
+        <div class="chips" id="i-slots">
+          <span class="chip" data-v="清晨">清晨</span><span class="chip" data-v="上午">上午</span>
+          <span class="chip" data-v="下午">下午</span><span class="chip" data-v="晚上">晚上</span>
+        </div>
+        <div class="err">请至少选择一个时段</div>
+      </div>
+      <div class="field" id="f-place">
+        <label>校内地点（必填）</label>
+        <input type="text" id="i-place" placeholder="如：东图书馆三楼 / 教学楼 A 自习室">
+        <div class="err">请填写校内地点</div>
+      </div>
+      <div class="field" id="f-num">
+        <label>想找几位搭子（1–10，不含自己）</label>
+        <input type="number" id="i-num" min="1" max="10" placeholder="如：3">
+        <div class="err">请填写 1–10 之间的数字</div>
+      </div>
+      <div class="field">
+        <label>描述（选填，≤200字）</label>
+        <textarea id="i-desc" maxlength="200" placeholder="补充你的目标、节奏、期望的搭子…"></textarea>
+      </div>
+      <div class="chips" style="margin-bottom:10px;">
+        <span class="chip on" id="tg-auth" data-v="1">当前身份：已认证（点我切未认证）</span>
+      </div>
+      <button class="btn" id="btn-pub" style="width:100%;">发布</button>
+      <div class="block-msg" id="msg-block">尚未通过学生认证，无法发布搭子卡片 → 去认证（FR-02）</div>
+      <div class="ok-msg" id="msg-ok"></div>
+    </div>
+  </div>
+</div>
+
+<div class="fr">
+  <div class="fr-id">FR-04</div>
+  <h3>搭子广场（浏览与筛选）</h3>
+  <p><b>触发</b>：任意用户进入首页。</p>
+  <p><b>处理规则</b>：默认展示<b>本校 + 状态为招募中</b>的卡片；筛选维度为目标类别（单选）、每日时段（多选，卡片需包含全部所选时段）；排序固定为发布时间倒序；卡片项展示：类型标、标题、类别、已加入人数 / 目标人数、时段标签、校内地点、剩余招募天数。跨校内容 MVP 一律不可见。</p>
+  <p><b>结果与状态</b>：筛选无结果时展示空态并引导放宽筛选或发布自己的卡片；点击卡片进详情（含完整描述、队长信息、已加入成员、申请按钮）。已满员 / 已结束卡片可看不可申。</p>
+
+  <div class="demo">
+    <div class="demo-label"><b>可交互示例</b> · FR-04 广场 —— 点类别与时段筛选试试（选「考研 + 清晨」可看到空态）；已满员卡片申请按钮置灰。</div>
+    <div class="phone">
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:12px;color:var(--sub);">类别</span>
+        <div class="chips" id="qf-cat">
+          <span class="chip on" data-v="">全部</span><span class="chip" data-v="考研">考研</span>
+          <span class="chip" data-v="四六级">四六级</span><span class="chip" data-v="期末自习">期末自习</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+        <span style="font-size:12px;color:var(--sub);">时段</span>
+        <div class="chips" id="qf-slot">
+          <span class="chip" data-v="清晨">清晨</span><span class="chip" data-v="上午">上午</span>
+          <span class="chip" data-v="晚上">晚上</span>
+        </div>
+      </div>
+      <div id="card-list"></div>
+      <div class="empty" id="card-empty" style="display:none;">这组条件下暂时没有搭子<br><span style="font-size:12px;">放宽筛选，或者发布你的搭子卡片让大家来响应你</span></div>
+      <button class="btn ghost" style="width:100%;margin-top:4px;">+ 发布搭子</button>
+    </div>
+  </div>
+</div>
+
+<div class="fr">
+  <div class="fr-id">FR-05</div>
+  <h3>报名申请与审批</h3>
+  <p><b>触发</b>：认证学生在「招募中」卡片详情点击「申请加入」。</p>
+  <p><b>处理规则</b>：申请需附一句话留言（必填 ≤50 字，如自我介绍与节奏匹配说明）；同一用户对同一张卡片只能存在一个待处理 / 已通过的申请；队长在小队页与通知中看到新申请。</p>
+  <p><b>结果与状态</b>：队长<b>通过</b> → 申请者加入小队、卡片已加入人数 +1、双方自动建立私聊会话；若人数达目标人数，卡片自动转「已满员」，其余待处理申请批量置为已失效。队长<b>拒绝</b> → 申请者收到结果，可再对其他卡片发起申请。审批无时效约束，但卡片到期时未处理申请自动失效。</p>
+</div>
+
+<div class="fr">
+  <div class="fr-id">FR-06</div>
+  <h3>小队与每日打卡</h3>
+  <p><b>触发</b>：小队成员进入小队页。</p>
+  <p><b>处理规则</b>：小队页展示成员列表（头像、昵称、队长标、连续天数、今日是否已打卡）；成员每日可打卡 1 次——文字必填 ≤100 字 + 可选 1 张图，全部过内容安全检测；连续天数按自然日连续计算，断签即清零重计；<b>当日 24:00 后不可打卡，不支持补签</b> <span class="tag assume">假设</span>。</p>
+  <p><b>结果与状态</b>：打卡成功后本人与全体成员立即可见；卡片「已结束」后小队转只读，历史打卡可查看。成员可退出小队（已加入人数 −1）；<b>已满员卡片因成员退出回到「招募中」</b>并重新接受申请；队长退出前必须先转让队长（转让给任一成员），防止小队无主。</p>
+
+  <div class="demo">
+    <div class="demo-label"><b>可交互示例</b> · FR-06 小队打卡 —— 点击「我要打卡」完成一次打卡，观察本人状态与按钮变化；队长与队员的连续天数互为可见。</div>
+    <div class="phone">
+      <div style="font-weight:600;margin-bottom:2px;">考研数学 daily 打卡搭子 <span class="pill goal">小队 · 3/4</span></div>
+      <div style="font-size:11.5px;color:var(--sub);margin-bottom:8px;">今天 · 2026-10-12 · 已结束前还可打卡</div>
+      <div class="member"><div class="avatar">林</div><div class="who"><b>林一 <span class="pill goal">队长</span></b><span>连续 12 天</span></div><div class="st"><span class="done">今日已打卡</span><br>08:02</div></div>
+      <div class="member"><div class="avatar">橙</div><div class="who"><b>阿橙</b><span>连续 7 天</span></div><div class="st"><span class="done">今日已打卡</span><br>07:45</div></div>
+      <div class="member"><div class="avatar">我</div><div class="who"><b>我</b><span id="me-streak">连续 0 天</span></div><div class="st" id="me-st"><span class="todo">今日未打卡</span></div></div>
+      <textarea id="ci-text" maxlength="100" placeholder="今天做了什么？（必填，≤100字）" style="width:100%;border:1px solid var(--line);border-radius:6px;padding:7px 10px;font-size:13px;margin-top:8px;font-family:inherit;"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="btn" id="btn-ci" style="flex:1;">我要打卡</button>
+      </div>
+      <div class="block-msg" id="ci-err">打卡内容不能为空；当日 24:00 后不可打卡（不支持补签）</div>
+      <div class="ok-msg" id="ci-ok">打卡成功！明天继续，断签清零哦</div>
+    </div>
+  </div>
+</div>
+
+<div class="fr">
+  <div class="fr-id">FR-07</div>
+  <h3>私聊（异步留言式）</h3>
+  <p><b>触发</b>：报名申请通过后，双方自动获得会话；也可在小队成员列表内向队友发起。</p>
+  <p><b>处理规则</b>：会话仅限通过申请建立的关系，不可向陌生用户直接发起；消息为文字（≤200 字）与图片，逐条过内容安全检测；不承诺实时送达，以未读红点提示新消息。<span class="tag p0">决策</span> MVP 不做实时 IM 与推送依赖，降低开发与合规成本。</p>
+  <p><b>结果与状态</b>：消息不可撤回（MVP）；任一方被举报封禁后会话冻结只读。</p>
+</div>
+
+<div class="fr">
+  <div class="fr-id">FR-08</div>
+  <h3>举报与安全处置</h3>
+  <p><b>触发</b>：用户在卡片详情、用户资料页、私聊会话点击「举报」。</p>
+  <p><b>处理规则</b>：举报理由从预设枚举选择（虚假身份 / 骚扰 / 广告营销 / 违规内容 / 其他）+ 可选补充说明；举报不影响被举报对象的使用，直至管理员处置。</p>
+  <p><b>结果与状态</b>：<span class="tag assume">假设</span> MVP 管理端为最小管理手段（数据库直接操作），无自助后台。管理员可：下架卡片（状态 → 已下架，发布者与成员可见原因）、封禁用户（封禁后不可发布 / 申请 / 打卡 / 私聊，已进小队保留成员身份但转只读）。处理结果反馈举报人。</p>
+</div>
+
+<!-- ========== 06 ========== -->
+<h2 id="s6"><span class="no">06</span>共享规则</h2>
+
+<h3>R-1 权限矩阵</h3>
+<table>
+  <tr><th>操作</th><th>访客</th><th>认证学生</th><th>队长（额外）</th><th>管理员</th></tr>
+  <tr><td>浏览广场 / 卡片详情</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+  <tr><td>发布卡片</td><td>引导认证</td><td>✓（≤2 张招募中）</td><td>—</td><td>—</td></tr>
+  <tr><td>报名申请</td><td>引导认证</td><td>✓</td><td>—</td><td>—</td></tr>
+  <tr><td>审批申请 / 移出成员 / 转让队长 / 手动结束卡片</td><td>—</td><td>—</td><td>✓</td><td>—</td></tr>
+  <tr><td>私聊 / 打卡</td><td>引导认证</td><td>✓</td><td>✓</td><td>—</td></tr>
+  <tr><td>举报</td><td>✓</td><td>✓</td><td>✓</td><td>—</td></tr>
+  <tr><td>下架卡片 / 封禁用户</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
+</table>
+
+<h3>R-2 内容安全（合规硬性要求）</h3>
+<p>所有用户产生内容——卡片全部文本字段、申请留言、打卡文字与图片、私聊消息——在发布前调用微信内容安全检测接口（文本 / 图片各对应接口）。命中违规：该次发布失败，明确提示用户修改；不静默丢弃、不先发后审。</p>
+
+<h3>R-3 通知</h3>
+<p><span class="tag assume">假设</span> MVP 通知手段为小程序内红点 + 微信订阅消息（需用户主动订阅）：新申请（通知队长）、申请结果（通知申请者）、认证结果、卡片被下架。不做推送策略的精细化运营。</p>
+
+<h3>R-4 时间与到期</h3>
+<p>日期均按北京时间自然日；卡片到期（结束日期 24:00）由系统自动转「已结束」；未处理申请批量置为已失效；「已结束」小队的打卡入口关闭、历史保留。连续天数以打卡记录的自然日连续性为准，时区不引入任何修正。</p>
+
+<!-- ========== 07 ========== -->
+<h2 id="s7"><span class="no">07</span>待定问题</h2>
+<table>
+  <tr><th>问题</th><th>影响</th><th>当前处理</th></tr>
+  <tr><td>首批学校白名单范围（先打哪几所学校）</td><td>冷启动运营动作，影响学校选择页与地点标签预置</td><td><span class="tag tbd">TBD</span> 不阻塞开发，上线前需定</td></tr>
+  <tr><td>学生认证审核时效承诺（人工 T+1 是否可接受）</td><td>影响新用户转化</td><td><span class="tag assume">假设</span> 按 T+1 执行，观察首批数据后复核</td></tr>
+  <tr><td>订阅消息打卡提醒是否进 MVP</td><td>影响次日留存</td><td><span class="tag tbd">TBD</span> 倾向 P1，待评审确认</td></tr>
+</table>
+
+<p class="note" style="margin-top:40px;">学搭子 PRD v0.1 · 2026-10-12 · 文中「假设」项均为可运行的产品决策，评审时可推翻重定；「TBD」项为上线前必须解决的材料缺口。</p>
+
+</div>
+
+<script>
+// chip 通用行为
+document.querySelectorAll('.chips').forEach(function(box){
+  box.addEventListener('click', function(e){
+    var c = e.target.closest('.chip'); if(!c) return;
+    if(box.id==='f-type' || box.id==='tg-auth' || (box.id==='qf-cat')){
+      box.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on');});
+      c.classList.add('on');
+    } else {
+      c.classList.toggle('on');
+    }
+    if(box.id==='tg-auth'){
+      c.textContent = c.classList.contains('on') ? '当前身份：已认证（点我切未认证）' : '当前身份：未认证（点我切已认证）';
+    }
+    if(box.closest('#s5') && box.id==='qf-cat'){ renderCards(); }
+    if(box.id==='qf-slot'){ renderCards(); }
+  });
+});
+
+// ===== FR-03 发布表单 =====
+var today = new Date('2026-10-12');
+document.getElementById('i-d1').value='2026-10-15';
+document.getElementById('i-d2').value='2026-12-20';
+function vfield(id, ok){ var f=document.getElementById(id); f.classList.toggle('invalid', !ok); return ok; }
+document.getElementById('btn-pub').addEventListener('click', function(){
+  document.getElementById('msg-ok').style.display='none';
+  document.getElementById('msg-block').style.display='none';
+  var auth = document.getElementById('tg-auth').classList.contains('on');
+  if(!auth){ document.getElementById('msg-block').style.display='block'; return; }
+  var oks=[];
+  oks.push(vfield('f-title', document.getElementById('i-title').value.trim().length>0));
+  oks.push(vfield('f-cat', document.getElementById('i-cat').value!==''));
+  var d1=new Date(document.getElementById('i-d1').value), d2=new Date(document.getElementById('i-d2').value);
+  var diff=(d2-d1)/86400000;
+  oks.push(vfield('f-date', document.getElementById('i-d1').value && document.getElementById('i-d2').value && d1>=today && diff>0 && diff<=180));
+  var slots=[]; document.querySelectorAll('#i-slots .chip.on').forEach(function(c){slots.push(c.dataset.v);});
+  oks.push(vfield('f-slot', slots.length>0));
+  oks.push(vfield('f-place', document.getElementById('i-place').value.trim().length>0));
+  var n=parseInt(document.getElementById('i-num').value,10);
+  oks.push(vfield('f-num', n>=1 && n<=10));
+  if(oks.every(Boolean)){
+    var m=document.getElementById('msg-ok');
+    m.style.display='block';
+    m.innerHTML='发布成功（示例）→ 卡片进入本校广场「招募中」，你已成为小队队长（1 人）· 已过内容安全检测';
+  }
+});
+
+// ===== FR-04 广场 =====
+var CARDS=[
+ {t:'考研数学 daily 打卡搭子', type:'目标型', cat:'考研', slots:['上午','晚上'], place:'东图书馆三楼', join:2, cap:4, days:68, full:false},
+ {t:'六级 500 分冲刺互督', type:'目标型', cat:'四六级', slots:['清晨','晚上'], place:'外语楼晨读角', join:3, cap:6, days:40, full:false},
+ {t:'期末周图书馆晚自习搭子', type:'地点型', cat:'期末自习', slots:['晚上'], place:'西区自习室 201', join:1, cap:3, days:52, full:false},
+ {t:'考研英语真题精读队', type:'目标型', cat:'考研', slots:['下午'], place:'南楼考研自习区', join:6, cap:6, days:61, full:true}
+];
+function renderCards(){
+  var cat=''; document.querySelectorAll('#qf-cat .chip').forEach(function(c){if(c.classList.contains('on'))cat=c.dataset.v;});
+  var slots=[]; document.querySelectorAll('#qf-slot .chip.on').forEach(function(c){slots.push(c.dataset.v);});
+  var list=document.getElementById('card-list'); list.innerHTML='';
+  var shown=CARDS.filter(function(k){
+    if(cat && k.cat!==cat) return false;
+    return slots.every(function(s){ return k.slots.indexOf(s)>=0; });
+  });
+  shown.forEach(function(k){
+    var d=document.createElement('div'); d.className='card';
+    var chips=k.slots.map(function(s){return '<span class="pill">'+s+'</span>';}).join('')+'<span class="pill">'+k.place+'</span>';
+    d.innerHTML='<div class="t">'+k.t+' <span class="pill '+(k.type==='目标型'?'goal':'')+'">'+k.type+'</span></div>'
+      +'<div class="row2"><span>'+k.cat+'</span><span class="join">已加入 '+k.join+'/'+k.cap+'</span><span>剩 '+k.days+' 天</span></div>'
+      +'<div class="row2">'+chips+'</div>'
+      +(k.full?'<button class="btn small" disabled style="margin-top:8px;">已满员 · 不可申请</button>':'<button class="btn small" style="margin-top:8px;">申请加入</button>');
+    list.appendChild(d);
+  });
+  document.getElementById('card-empty').style.display = shown.length? 'none':'block';
+}
+renderCards();
+
+// ===== FR-06 打卡 =====
+document.getElementById('btn-ci').addEventListener('click', function(){
+  var t=document.getElementById('ci-text').value.trim();
+  document.getElementById('ci-ok').style.display='none';
+  var err=document.getElementById('ci-err');
+  if(!t){ err.style.display='block'; return; }
+  err.style.display='none';
+  document.getElementById('me-st').innerHTML='<span class="done">今日已打卡</span><br>刚刚';
+  document.getElementById('me-streak').textContent='连续 1 天';
+  document.getElementById('btn-ci').disabled=true; document.getElementById('btn-ci').textContent='今日已打卡';
+  document.getElementById('ci-ok').style.display='block';
+});
+</script>
+</body>
+</html>

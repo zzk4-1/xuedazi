@@ -1,0 +1,17 @@
+.filter {
+  margin-bottom: 16rpx;
+}
+.filter-line {
+  margin-bottom: 12rpx;
+}
+.item .top {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.item .right {
+  margin-left: auto;
+}
+.right {
+  flex: none;
+}

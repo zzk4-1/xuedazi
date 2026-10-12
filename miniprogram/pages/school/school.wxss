@@ -1,0 +1,18 @@
+.school-list {
+  padding: 0 28rpx;
+}
+.school-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid #e3e7ec;
+  font-size: 28rpx;
+}
+.school-item:last-child {
+  border-bottom: none;
+}
+.school-item.on {
+  color: #1f5c4d;
+  font-weight: 600;
+}

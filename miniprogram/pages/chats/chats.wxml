@@ -1,0 +1,16 @@
+<view class="container">
+  <view wx:if="{{chats.length}}">
+    <view class="chat-item card" wx:for="{{chats}}" wx:key="id" data-id="{{item.id}}" bindtap="goChat">
+      <view class="avatar">{{item.peer_nickname[0]}}</view>
+      <view style="flex:1; min-width:0;">
+        <view class="row" style="justify-content:space-between;">
+          <text class="t">{{item.peer_nickname}}</text>
+          <text class="muted" style="font-size:22rpx;">{{item.last_time}}</text>
+        </view>
+        <view class="muted ellipsis">{{item.last_message || 'Say hello'}}</view>
+      </view>
+      <view wx:if="{{item.unread}}" class="badge">{{item.unread}}</view>
+    </view>
+  </view>
+  <view wx:else class="empty">No chats yet. Chats appear after you connect with buddies.</view>
+</view>

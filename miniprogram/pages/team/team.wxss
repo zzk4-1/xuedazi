@@ -1,0 +1,42 @@
+.member {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 14rpx 0;
+  border-bottom: 1rpx dashed #e3e7ec;
+}
+.member:last-child {
+  border-bottom: none;
+}
+.avatar.small {
+  width: 56rpx;
+  height: 56rpx;
+  font-size: 24rpx;
+}
+.st .done {
+  color: #1f5c4d;
+  font-weight: 600;
+  font-size: 24rpx;
+}
+.st .todo {
+  color: #8a5a00;
+  font-size: 24rpx;
+}
+.report {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+}
+.checkin {
+  border-top: 1rpx dashed #e3e7ec;
+  padding: 16rpx 0;
+}
+.checkin:first-of-type {
+  border-top: none;
+}
+.checkin .content {
+  margin-top: 10rpx;
+  background: #f7f9f8;
+  border-radius: 10rpx;
+  padding: 16rpx;
+  font-size: 26rpx;
+}
